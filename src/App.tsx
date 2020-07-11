@@ -2,11 +2,14 @@ import {ApolloProvider} from '@apollo/react-hooks';
 import React from 'react';
 import client from './components/ApolloClient';
 import HelloWorld from './components/helloWorld';
+import AppLayout from './components/appLayout';
 
 const App: React.FC = () => {
   return (
     <ApolloProvider client={client}>
-      <HelloWorld />
+      <AppLayout>
+        <HelloWorld />
+      </AppLayout>
     </ApolloProvider>
   );
 };
