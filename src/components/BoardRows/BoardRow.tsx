@@ -2,6 +2,15 @@ import React, {useState} from 'react';
 import gql from 'graphql-tag';
 import {useMutation} from '@apollo/react-hooks';
 import {Button, Card, Icon, Input} from 'semantic-ui-react';
+import {BoardRow as BoardRowType} from '../../types';
+
+export const BOARD_ROW_FRAGMENT = gql`
+  fragment BoardRowFragment on BoardRow {
+    id
+    rowNumber
+    activityDescription
+  }
+`;
 
 const UPDATE_BOARD_ROW = gql`
   mutation UpdateBoardRow($rowNumber: Int!, $activityDescription: String!) {
@@ -9,22 +18,13 @@ const UPDATE_BOARD_ROW = gql`
       rowNumber: $rowNumber
       activityDescription: $activityDescription
     ) {
-      id
-      activityDescription
-      rowNumber
+      ...BoardRowFragment
     }
   }
+  ${BOARD_ROW_FRAGMENT}
 `;
 
-interface BoardRowProps {
-  rowNumber: number;
-  activityDescription: string;
-}
-
-const BoardRow: React.FC<BoardRowProps> = ({
-  rowNumber,
-  activityDescription,
-}) => {
+const BoardRow: React.FC<BoardRowType> = ({rowNumber, activityDescription}) => {
   const [isEditing, updateIsEditing] = useState(false);
   const [updateBoardRow, {loading: mutationLoading}] = useMutation(
     UPDATE_BOARD_ROW,
@@ -50,7 +50,9 @@ const BoardRow: React.FC<BoardRowProps> = ({
             {isEditing ? (
               <Input
                 value={activityDescriptionInput}
-                onChange={e => updateActivityDescriptionInput(e.target.value)}
+                onChange={(e: React.FormEvent<HTMLInputElement>): void =>
+                  updateActivityDescriptionInput(e.currentTarget.value)
+                }
               />
             ) : (
               activityDescription
@@ -63,13 +65,14 @@ const BoardRow: React.FC<BoardRowProps> = ({
                 basic
                 loading={mutationLoading}
                 style={{padding: '12px'}}
-                onClick={() => {
+                onClick={(e: React.SyntheticEvent) => {
                   updateBoardRow({
                     variables: {
                       rowNumber,
                       activityDescription: activityDescriptionInput,
                     },
                   });
+                  e.preventDefault();
                 }}
               >
                 <Icon name="save outline" />
