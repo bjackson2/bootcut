@@ -36,8 +36,7 @@ const BoardRow: React.FC<BoardRowType> = ({rowNumber, activityDescription}) => {
   const [updateBoardRow, {loading: mutationLoading}] = useMutation(
     UPDATE_BOARD_ROW,
     {
-      onCompleted: data => {
-        console.log(data);
+      onCompleted: () => {
         updateIsEditing(false);
       },
     }
