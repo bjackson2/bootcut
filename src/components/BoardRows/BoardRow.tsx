@@ -3,6 +3,7 @@ import gql from 'graphql-tag';
 import {useMutation} from '@apollo/react-hooks';
 import {Button, Card, Icon, Input} from 'semantic-ui-react';
 import {BoardRow as BoardRowType} from '../../types';
+import {useParams} from 'react-router-dom';
 
 export const BOARD_ROW_FRAGMENT = gql`
   fragment BoardRowFragment on BoardRow {
@@ -13,8 +14,13 @@ export const BOARD_ROW_FRAGMENT = gql`
 `;
 
 const UPDATE_BOARD_ROW = gql`
-  mutation UpdateBoardRow($rowNumber: Int!, $activityDescription: String!) {
+  mutation UpdateBoardRow(
+    $gameId: String!
+    $rowNumber: Int!
+    $activityDescription: String!
+  ) {
     updateBoardRow(
+      gameId: $gameId
       rowNumber: $rowNumber
       activityDescription: $activityDescription
     ) {
@@ -25,11 +31,15 @@ const UPDATE_BOARD_ROW = gql`
 `;
 
 const BoardRow: React.FC<BoardRowType> = ({rowNumber, activityDescription}) => {
+  const {id: gameId} = useParams();
   const [isEditing, updateIsEditing] = useState(false);
   const [updateBoardRow, {loading: mutationLoading}] = useMutation(
     UPDATE_BOARD_ROW,
     {
-      onCompleted: () => updateIsEditing(false),
+      onCompleted: data => {
+        console.log(data);
+        updateIsEditing(false);
+      },
     }
   );
   const [activityDescriptionInput, updateActivityDescriptionInput] = useState(
@@ -68,6 +78,7 @@ const BoardRow: React.FC<BoardRowType> = ({rowNumber, activityDescription}) => {
                 onClick={(e: React.SyntheticEvent) => {
                   updateBoardRow({
                     variables: {
+                      gameId,
                       rowNumber,
                       activityDescription: activityDescriptionInput,
                     },

@@ -3,3 +3,9 @@ export interface BoardRow {
   activityDescription: string;
   rowNumber: number;
 }
+
+export interface Game {
+  id: number;
+  name: string;
+  shortCode: string;
+}

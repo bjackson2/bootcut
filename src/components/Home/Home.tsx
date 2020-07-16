@@ -1,13 +1,23 @@
 import React, {useState} from 'react';
 import {Button, Input} from 'semantic-ui-react';
-import {useMutation} from '@apollo/react-hooks';
+import {useMutation, useQuery} from '@apollo/react-hooks';
 import gql from 'graphql-tag';
-import {useHistory} from 'react-router-dom';
+import {useHistory, Link} from 'react-router-dom';
+import {Game} from '../../types';
 
 const CREATE_GAME = gql`
   mutation CreateGame($name: String) {
     createGame(name: $name) {
       id
+      shortCode
+    }
+  }
+`;
+const GAMES_QUERY = gql`
+  query GamesQuery {
+    games {
+      id
+      name
       shortCode
     }
   }
@@ -19,13 +29,23 @@ const Home: React.FC = () => {
     onCompleted: ({createGame: {shortCode}}) =>
       history.push(`/game/${shortCode}`),
   });
+  const {data, loading, error} = useQuery(GAMES_QUERY);
   const [isCreatingGame, updateIsCreatingGame] = useState(false);
   const [gameName, updateGameName] = useState('');
 
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{JSON.stringify(error)}</div>;
   return (
     <section>
       <h1>Welcome to Bootcut!</h1>
 
+      <h3>Games</h3>
+
+      {data.games.map((g: Game) => (
+        <div key={g.id}>
+          <Link to={`/game/${g.shortCode}`}>{g.name}</Link>
+        </div>
+      ))}
       {isCreatingGame ? (
         <div>
           <Input
