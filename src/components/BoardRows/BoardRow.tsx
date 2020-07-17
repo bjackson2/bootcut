@@ -14,12 +14,12 @@ export const BOARD_ROW_FRAGMENT = gql`
 
 const UPDATE_BOARD_ROW = gql`
   mutation UpdateBoardRow(
-    $gameId: String!
+    $gameCode: String!
     $rowNumber: Int!
     $activityDescription: String!
   ) {
     updateBoardRow(
-      gameId: $gameId
+      gameCode: $gameCode
       rowNumber: $rowNumber
       activityDescription: $activityDescription
     ) {
@@ -30,7 +30,7 @@ const UPDATE_BOARD_ROW = gql`
 `;
 
 const BoardRow: React.FC<BoardRowType> = ({rowNumber, activityDescription}) => {
-  const {id: gameId} = useParams();
+  const {gameCode} = useParams();
   const [isEditing, updateIsEditing] = useState(false);
   const [updateBoardRow, {loading: mutationLoading}] = useMutation(
     UPDATE_BOARD_ROW,
@@ -76,7 +76,7 @@ const BoardRow: React.FC<BoardRowType> = ({rowNumber, activityDescription}) => {
                 onClick={(e: React.SyntheticEvent) => {
                   updateBoardRow({
                     variables: {
-                      gameId,
+                      gameCode,
                       rowNumber,
                       activityDescription: activityDescriptionInput,
                     },

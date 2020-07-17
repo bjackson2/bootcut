@@ -15,7 +15,7 @@ const App: React.FC = () => {
             <Route exact path="/">
               <Home />
             </Route>
-            <Route exact path="/game/:id">
+            <Route exact path="/game/:gameCode">
               <Game />
             </Route>
           </Switch>

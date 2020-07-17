@@ -6,6 +6,5 @@ export interface BoardRow {
 
 export interface Game {
   id: number;
-  name: string;
-  shortCode: string;
+  code: string;
 }
