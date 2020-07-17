@@ -1,9 +1,8 @@
 import React, {useState} from 'react';
-import gql from 'graphql-tag';
-import {useMutation} from '@apollo/react-hooks';
 import {Button, Card, Icon, Input} from 'semantic-ui-react';
 import {BoardRow as BoardRowType} from '../../types';
 import {useParams} from 'react-router-dom';
+import {useMutation, gql} from '@apollo/client';
 
 export const BOARD_ROW_FRAGMENT = gql`
   fragment BoardRowFragment on BoardRow {

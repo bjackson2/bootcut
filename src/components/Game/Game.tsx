@@ -1,6 +1,5 @@
 import React from 'react';
-import gql from 'graphql-tag';
-import {useQuery} from '@apollo/react-hooks';
+import {useQuery, gql} from '@apollo/client';
 import BoardRows from '../BoardRows';
 import {useParams} from 'react-router-dom';
 import {BOARD_ROW_FRAGMENT} from '../BoardRows/BoardRow';

@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {Button, Input} from 'semantic-ui-react';
-import {useMutation, useQuery} from '@apollo/react-hooks';
-import gql from 'graphql-tag';
+import {useMutation, useQuery, gql} from '@apollo/client';
 import {useHistory, Link} from 'react-router-dom';
 import {Game} from '../../types';
 
