@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useQuery, gql} from '@apollo/client';
 import BoardRows from '../BoardRows';
 import {useParams} from 'react-router-dom';
@@ -17,9 +17,32 @@ const GAME_QUERY = gql`
   ${BOARD_ROW_FRAGMENT}
 `;
 
+const BOARD_ROW_UPDATED_SUBSCRIPTION = gql`
+  subscription BoardRowUpdated($gameId: String!) {
+    boardRowUpdated(gameId: $gameId) {
+      ...BoardRowFragment
+    }
+  }
+  ${BOARD_ROW_FRAGMENT}
+`;
+
+const boardRowUpdatedSubscription = (
+  subscribeToMore: any,
+  gameId: string
+) => () => {
+  subscribeToMore({
+    document: BOARD_ROW_UPDATED_SUBSCRIPTION,
+    variables: {gameId},
+  });
+};
+
 const Game: React.FC = () => {
   const {id} = useParams();
-  const {loading, error, data} = useQuery(GAME_QUERY, {variables: {id}});
+  const {loading, error, data, subscribeToMore} = useQuery(GAME_QUERY, {
+    variables: {id},
+  });
+
+  useEffect(boardRowUpdatedSubscription(subscribeToMore, id), []);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{JSON.stringify(error)}</div>;

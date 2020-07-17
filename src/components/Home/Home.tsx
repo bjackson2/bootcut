@@ -41,9 +41,9 @@ const Home: React.FC = () => {
       <h3>Games</h3>
 
       {data.games.map((g: Game) => (
-        <div key={g.id}>
+        <p key={g.id}>
           <Link to={`/game/${g.shortCode}`}>{g.name}</Link>
-        </div>
+        </p>
       ))}
       {isCreatingGame ? (
         <div>
