@@ -1,14 +1,14 @@
 import {ApolloProvider} from '@apollo/client';
 import React from 'react';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
-import client from './components/ApolloClient';
 import AppLayout from './components/appLayout';
 import Home from './components/Home';
 import Game from './components/Game';
+import ApolloClient from './components/ApolloClient';
 
 const App: React.FC = () => {
   return (
-    <ApolloProvider client={client}>
+    <ApolloProvider client={ApolloClient}>
       <BrowserRouter>
         <AppLayout>
           <Switch>

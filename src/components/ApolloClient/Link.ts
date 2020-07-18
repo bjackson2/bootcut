@@ -1,6 +1,6 @@
-import {ApolloClient, InMemoryCache, HttpLink, split} from '@apollo/client';
-import {getMainDefinition} from '@apollo/client/utilities';
+import {HttpLink, split} from '@apollo/client';
 import {WebSocketLink} from '@apollo/client/link/ws';
+import {getMainDefinition} from '@apollo/client/utilities';
 
 const httpLink = new HttpLink({
   uri: `http://${process.env.REACT_APP_GRAPHQL_SERVER_URI}`,
@@ -10,7 +10,7 @@ const wsLink = new WebSocketLink({
   options: {reconnect: true},
 });
 
-const link = split(
+export default split(
   ({query}) => {
     const definition = getMainDefinition(query);
     return (
@@ -21,16 +21,3 @@ const link = split(
   wsLink,
   httpLink
 );
-
-const client = new ApolloClient({
-  cache: new InMemoryCache(),
-  link,
-  queryDeduplication: false,
-  defaultOptions: {
-    watchQuery: {
-      fetchPolicy: 'cache-and-network',
-    },
-  },
-});
-
-export default client;
