@@ -13,6 +13,7 @@ const avatars: Record<string, string> = {
   ironman: 'https://avatarfiles.alphacoders.com/128/128562.jpg',
   lips: 'https://avatarfiles.alphacoders.com/169/169356.jpg',
   mario: 'https://avatarfiles.alphacoders.com/645/64561.jpg',
+  minecraft: 'https://avatarfiles.alphacoders.com/168/168695.jpg',
   misfits: 'https://avatarfiles.alphacoders.com/912/91243.gif',
   monkey: 'https://avatarfiles.alphacoders.com/129/129785.jpg',
   morgana: 'https://avatarfiles.alphacoders.com/201/201481.jpg',
