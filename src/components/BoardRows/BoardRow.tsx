@@ -68,7 +68,7 @@ const BoardRow: React.FC<BoardRowType> = ({rowNumber, activityDescription}) => {
                 }}
               />
             ) : (
-              activityDescription
+              activityDescription || <em>Click to edit...</em>
             )}
           </Grid.Column>
           {isEditing && (
