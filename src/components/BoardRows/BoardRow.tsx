@@ -29,7 +29,16 @@ const UPDATE_BOARD_ROW = gql`
   ${BOARD_ROW_FRAGMENT}
 `;
 
+interface InputInterface extends Input {
+  inputRef?: {
+    current: {
+      value: string;
+    };
+  };
+}
+
 const BoardRow: React.FC<BoardRowType> = ({rowNumber, activityDescription}) => {
+  let activityDescriptionInput: InputInterface | null;
   const {gameCode} = useParams();
   const [isEditing, updateIsEditing] = useState(false);
   const [updateBoardRow, {loading: mutationLoading}] = useMutation(
@@ -39,9 +48,6 @@ const BoardRow: React.FC<BoardRowType> = ({rowNumber, activityDescription}) => {
         updateIsEditing(false);
       },
     }
-  );
-  const [activityDescriptionInput, updateActivityDescriptionInput] = useState(
-    activityDescription
   );
 
   return (
@@ -56,10 +62,10 @@ const BoardRow: React.FC<BoardRowType> = ({rowNumber, activityDescription}) => {
             {isEditing ? (
               <Input
                 fluid
-                value={activityDescriptionInput}
-                onChange={(e): void =>
-                  updateActivityDescriptionInput(e.currentTarget.value)
-                }
+                defaultValue={activityDescription}
+                ref={node => {
+                  activityDescriptionInput = node;
+                }}
               />
             ) : (
               activityDescription
@@ -75,7 +81,10 @@ const BoardRow: React.FC<BoardRowType> = ({rowNumber, activityDescription}) => {
                     variables: {
                       gameCode,
                       rowNumber,
-                      activityDescription: activityDescriptionInput,
+                      activityDescription:
+                        activityDescriptionInput &&
+                        activityDescriptionInput.inputRef &&
+                        activityDescriptionInput.inputRef.current.value,
                     },
                   });
                   e.preventDefault();
