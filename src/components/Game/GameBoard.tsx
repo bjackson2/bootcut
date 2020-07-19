@@ -54,14 +54,16 @@ const GameBoard: React.FC = () => {
       <h1>Game time!</h1>
       <h3>Game Code: {data.game.code}</h3>
       <h3>Players</h3>
-      {data.game.gameParticipants.map((p: GameParticipant) => (
-        <Card key={p.id}>
-          <Image src={p.avatarUrl} wrapped ui={false} />
-          <Card.Content>
-            <Card.Header>{p.name}</Card.Header>
-          </Card.Content>
-        </Card>
-      ))}
+      <Card.Group>
+        {data.game.gameParticipants.map((p: GameParticipant) => (
+          <Card key={p.id}>
+            <Image src={p.avatarUrl} wrapped ui={false} />
+            <Card.Content>
+              <Card.Header>{p.name}</Card.Header>
+            </Card.Content>
+          </Card>
+        ))}
+      </Card.Group>
       <h3>Board Rows</h3>
       <BoardRows boardRows={data.game.boardRows} />
     </div>

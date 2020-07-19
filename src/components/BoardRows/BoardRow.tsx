@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Button, Card, Icon, Input} from 'semantic-ui-react';
+import {Button, Card, Input, Grid} from 'semantic-ui-react';
 import {BoardRow as BoardRowType} from '../../types';
 import {useParams} from 'react-router-dom';
 import {useMutation, gql} from '@apollo/client';
@@ -31,7 +31,7 @@ const UPDATE_BOARD_ROW = gql`
 
 const BoardRow: React.FC<BoardRowType> = ({rowNumber, activityDescription}) => {
   const {gameCode} = useParams();
-  const [isEditing, updateIsEditing] = useState(false);
+  const [isEditing, updateIsEditing] = useState(!activityDescription);
   const [updateBoardRow, {loading: mutationLoading}] = useMutation(
     UPDATE_BOARD_ROW,
     {
@@ -45,34 +45,31 @@ const BoardRow: React.FC<BoardRowType> = ({rowNumber, activityDescription}) => {
   );
 
   return (
-    <Card fluid>
-      <Card.Content>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
-          <div>
+    <Card
+      fluid
+      style={{cursor: 'pointer'}}
+      onClick={() => updateIsEditing(true)}
+    >
+      <Card.Content style={{lineHeight: '2.5em', color: 'black'}}>
+        <Grid stackable>
+          <Grid.Column width={14}>
             {isEditing ? (
               <Input
+                fluid
                 value={activityDescriptionInput}
-                onChange={(e: React.FormEvent<HTMLInputElement>): void =>
+                onChange={(e): void =>
                   updateActivityDescriptionInput(e.currentTarget.value)
                 }
               />
             ) : (
               activityDescription
             )}
-          </div>
-          <div>
-            {isEditing ? (
+          </Grid.Column>
+          {isEditing && (
+            <Grid.Column textAlign="center" width={2}>
               <Button
-                icon
-                basic
+                primary
                 loading={mutationLoading}
-                style={{padding: '12px'}}
                 onClick={(e: React.SyntheticEvent) => {
                   updateBoardRow({
                     variables: {
@@ -84,20 +81,11 @@ const BoardRow: React.FC<BoardRowType> = ({rowNumber, activityDescription}) => {
                   e.preventDefault();
                 }}
               >
-                <Icon name="save outline" />
+                Save
               </Button>
-            ) : (
-              <Button
-                icon
-                basic
-                style={{padding: '12px'}}
-                onClick={() => updateIsEditing(true)}
-              >
-                <Icon name="edit outline" />
-              </Button>
-            )}
-          </div>
-        </div>
+            </Grid.Column>
+          )}
+        </Grid>
       </Card.Content>
       <Card.Content extra>Row number: {rowNumber}</Card.Content>
     </Card>
