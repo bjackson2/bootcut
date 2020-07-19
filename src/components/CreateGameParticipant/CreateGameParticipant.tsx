@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {gql, useMutation} from '@apollo/client';
-import {Form, Button, Segment, Image} from 'semantic-ui-react';
+import {Form, Button, Image, Grid} from 'semantic-ui-react';
 import avatars from '../../utilities/avatars';
 import chunk from 'lodash.chunk';
 import {useParams} from 'react-router-dom';
@@ -56,12 +56,12 @@ const CreateGameParticipant: React.FC = () => {
         </Form.Field>
         <Form.Field>
           <label>Avatar</label>
-          <Segment.Group>
+          <Grid celled columns="equal" stackable>
             {chunk(Object.keys(avatars), 6).map(
               (row: string[], idx: number) => (
-                <Segment.Group horizontal key={idx}>
+                <Grid.Row key={idx}>
                   {row.map((k: string, idx: number) => (
-                    <Segment key={idx}>
+                    <Grid.Column key={idx}>
                       <Form.Radio
                         value={k}
                         checked={formValues.avatarName === k}
@@ -71,18 +71,18 @@ const CreateGameParticipant: React.FC = () => {
                       />
                       <Image
                         src={avatars[k]}
-                        size="tiny"
+                        size="small"
                         style={{cursor: 'pointer'}}
                         onClick={() =>
                           updateFormValues({...formValues, avatarName: k})
                         }
                       />
-                    </Segment>
+                    </Grid.Column>
                   ))}
-                </Segment.Group>
+                </Grid.Row>
               )
             )}
-          </Segment.Group>
+          </Grid>
         </Form.Field>
         <Button primary type="submit" disabled={loading} loading={loading}>
           Let&apos;s Go!
