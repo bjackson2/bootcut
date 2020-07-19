@@ -1,10 +1,9 @@
 import React, {useEffect} from 'react';
 import {useQuery, gql} from '@apollo/client';
-import BoardRows from '../BoardRows';
 import {useParams} from 'react-router-dom';
-import {BOARD_ROW_FRAGMENT} from '../BoardRows/BoardRow';
-import {Card, Image} from 'semantic-ui-react';
-import {GameParticipant} from '../../types';
+import BoardRows, {BOARD_ROW_FRAGMENT} from '../BoardRows';
+import GameParticipants, {GAME_PARTICIPANT_FRAGMENT} from '../GameParticipants';
+import addSubscriptions from '../subscriptions';
 
 const GAME_BOARD_QUERY = gql`
   query GameQuery($code: String!) {
@@ -12,9 +11,7 @@ const GAME_BOARD_QUERY = gql`
       id
       code
       gameParticipants {
-        id
-        name
-        avatarUrl
+        ...gameParticipantFragment
       }
       boardRows {
         ...BoardRowFragment
@@ -22,15 +19,7 @@ const GAME_BOARD_QUERY = gql`
     }
   }
   ${BOARD_ROW_FRAGMENT}
-`;
-
-const BOARD_ROW_UPDATED_SUBSCRIPTION = gql`
-  subscription BoardRowUpdated($gameCode: String!) {
-    boardRowUpdated(gameCode: $gameCode) {
-      ...BoardRowFragment
-    }
-  }
-  ${BOARD_ROW_FRAGMENT}
+  ${GAME_PARTICIPANT_FRAGMENT}
 `;
 
 const GameBoard: React.FC = () => {
@@ -40,10 +29,7 @@ const GameBoard: React.FC = () => {
   });
 
   useEffect(() => {
-    subscribeToMore({
-      document: BOARD_ROW_UPDATED_SUBSCRIPTION,
-      variables: {gameCode},
-    });
+    addSubscriptions({subscribeToMore, variables: {gameCode}});
   }, []);
 
   if (loading) return <div>Loading...</div>;
@@ -53,18 +39,7 @@ const GameBoard: React.FC = () => {
     <div>
       <h1>Game time!</h1>
       <h3>Game Code: {data.game.code}</h3>
-      <h3>Players</h3>
-      <Card.Group>
-        {data.game.gameParticipants.map((p: GameParticipant) => (
-          <Card key={p.id}>
-            <Image src={p.avatarUrl} wrapped ui={false} />
-            <Card.Content>
-              <Card.Header>{p.name}</Card.Header>
-            </Card.Content>
-          </Card>
-        ))}
-      </Card.Group>
-      <h3>Board Rows</h3>
+      <GameParticipants gameParticipants={data.game.gameParticipants} />
       <BoardRows boardRows={data.game.boardRows} />
     </div>
   );

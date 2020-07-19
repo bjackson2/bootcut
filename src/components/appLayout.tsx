@@ -19,7 +19,7 @@ const AppLayout: React.FC<Props> = ({children}) => (
         </Menu.Item>
       </Container>
     </Menu>
-    <Container style={{marginTop: '7em'}}>{children}</Container>
+    <Container style={{margin: '6em 0 3em'}}>{children}</Container>
   </div>
 );
 

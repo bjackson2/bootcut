@@ -7,11 +7,12 @@ interface BoardRowsProps {
 }
 
 const BoardRows: React.FC<BoardRowsProps> = ({boardRows}) => (
-  <div>
+  <>
+    <h3>Board Rows</h3>
     {boardRows.map((boardRow: BoardRow) => (
       <BoardRowComponent key={boardRow.rowNumber} {...boardRow} />
     ))}
-  </div>
+  </>
 );
 
 export default BoardRows;

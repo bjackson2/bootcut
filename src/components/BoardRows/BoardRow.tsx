@@ -31,7 +31,7 @@ const UPDATE_BOARD_ROW = gql`
 
 const BoardRow: React.FC<BoardRowType> = ({rowNumber, activityDescription}) => {
   const {gameCode} = useParams();
-  const [isEditing, updateIsEditing] = useState(!activityDescription);
+  const [isEditing, updateIsEditing] = useState(false);
   const [updateBoardRow, {loading: mutationLoading}] = useMutation(
     UPDATE_BOARD_ROW,
     {
