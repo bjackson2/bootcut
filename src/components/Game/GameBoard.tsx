@@ -3,6 +3,7 @@ import {useQuery, gql} from '@apollo/client';
 import {useParams} from 'react-router-dom';
 import BoardRows, {BOARD_ROW_FRAGMENT} from '../BoardRows';
 import GameParticipants, {GAME_PARTICIPANT_FRAGMENT} from '../GameParticipants';
+import GameDuration from '../GameDuration';
 import addSubscriptions from '../subscriptions';
 
 const GAME_BOARD_QUERY = gql`
@@ -10,6 +11,7 @@ const GAME_BOARD_QUERY = gql`
     game(code: $code) {
       id
       code
+      duration
       gameParticipants {
         ...gameParticipantFragment
       }
@@ -39,6 +41,7 @@ const GameBoard: React.FC = () => {
     <div>
       <h1>Game time!</h1>
       <h3>Game Code: {data.game.code}</h3>
+      <GameDuration duration={data.game.duration} />
       <GameParticipants gameParticipants={data.game.gameParticipants} />
       <BoardRows boardRows={data.game.boardRows} />
     </div>
