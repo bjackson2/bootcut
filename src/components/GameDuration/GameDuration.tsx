@@ -17,11 +17,12 @@ const UPDATE_GAME_MUTATION = gql`
   }
 `;
 
+const DEFAULT_HOURS = 2;
 const generateSequence = (count: number): number[] => [
   ...Array(count + 1).keys(),
 ];
 const getHours = (durationInMinutes: number | null) =>
-  durationInMinutes ? Math.trunc(durationInMinutes / 60) : 0;
+  durationInMinutes ? Math.trunc(durationInMinutes / 60) : DEFAULT_HOURS;
 const getMinutes = (durationInMinutes: number | null) =>
   durationInMinutes ? durationInMinutes % 60 : 0;
 
