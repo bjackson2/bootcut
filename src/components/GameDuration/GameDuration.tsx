@@ -8,9 +8,9 @@ interface GameDurationProps {
   duration: number;
 }
 
-const UPDATE_GAME_MUTATION = gql`
-  mutation UpdateGame($code: String!, $duration: Int) {
-    updateGame(code: $code, duration: $duration) {
+const UPDATE_GAME_DURATION_MUTATION = gql`
+  mutation UpdateGameDuration($code: String!, $duration: Int) {
+    updateGameDuration(code: $code, duration: $duration) {
       id
       duration
     }
@@ -32,7 +32,7 @@ const GameDuration: React.FC<GameDurationProps> = ({duration}) => {
     hours: getHours(duration),
     minutes: getMinutes(duration),
   });
-  const [updateGame] = useMutation(UPDATE_GAME_MUTATION);
+  const [updateGameDuration] = useMutation(UPDATE_GAME_DURATION_MUTATION);
 
   return (
     <>
@@ -49,7 +49,7 @@ const GameDuration: React.FC<GameDurationProps> = ({duration}) => {
                   ...formValues,
                   hours: Number(value),
                 });
-                updateGame({
+                updateGameDuration({
                   variables: {
                     code: gameCode,
                     duration: Number(value) * 60 + formValues.minutes,
@@ -74,7 +74,7 @@ const GameDuration: React.FC<GameDurationProps> = ({duration}) => {
                   ...formValues,
                   minutes: Number(value),
                 });
-                updateGame({
+                updateGameDuration({
                   variables: {
                     code: gameCode,
                     duration: formValues.hours * 60 + Number(value),
