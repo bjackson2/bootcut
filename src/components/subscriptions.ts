@@ -2,6 +2,7 @@ import {gql} from '@apollo/client';
 import {BOARD_ROW_FRAGMENT} from './BoardRows';
 import {GAME_PARTICIPANT_FRAGMENT} from './GameParticipants';
 import {GameParticipant} from '../types';
+import {TURN_ORDER_FRAGMENT} from './GameParticipants/GameParticipants';
 
 const BOARD_ROW_UPDATED_SUBSCRIPTION = gql`
   subscription BoardRowUpdated($gameCode: String!) {
@@ -19,6 +20,15 @@ const GAME_PARTICIPANT_CREATED_SUBSCRIPTION = gql`
     }
   }
   ${GAME_PARTICIPANT_FRAGMENT}
+`;
+
+const TURN_ORDER_UPDATED_SUBSCRIPTION = gql`
+  subscription TurnOrderUpdated($gameCode: String!) {
+    turnOrderUpdated(gameCode: $gameCode) {
+      ...turnOrderFragment
+    }
+  }
+  ${TURN_ORDER_FRAGMENT}
 `;
 
 interface AddSubscriptionsArgs {
@@ -63,6 +73,10 @@ const addSubscriptions = ({
 
       return {...prev, game};
     },
+  });
+  subscribeToMore({
+    document: TURN_ORDER_UPDATED_SUBSCRIPTION,
+    variables: {gameCode},
   });
 };
 

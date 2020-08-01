@@ -5,6 +5,7 @@ import BoardRows, {BOARD_ROW_FRAGMENT} from '../BoardRows';
 import GameParticipants, {GAME_PARTICIPANT_FRAGMENT} from '../GameParticipants';
 import GameDuration from '../GameDuration';
 import addSubscriptions from '../subscriptions';
+import {TURN_ORDER_FRAGMENT} from '../GameParticipants/GameParticipants';
 
 const GAME_BOARD_QUERY = gql`
   query GameQuery($code: String!) {
@@ -12,6 +13,7 @@ const GAME_BOARD_QUERY = gql`
       id
       code
       duration
+      ...turnOrderFragment
       gameParticipants {
         ...gameParticipantFragment
       }
@@ -22,6 +24,7 @@ const GAME_BOARD_QUERY = gql`
   }
   ${BOARD_ROW_FRAGMENT}
   ${GAME_PARTICIPANT_FRAGMENT}
+  ${TURN_ORDER_FRAGMENT}
 `;
 
 const GameBoard: React.FC = () => {
@@ -42,7 +45,10 @@ const GameBoard: React.FC = () => {
       <h1>Game time!</h1>
       <h3>Game Code: {data.game.code}</h3>
       <GameDuration duration={data.game.duration} />
-      <GameParticipants gameParticipants={data.game.gameParticipants} />
+      <GameParticipants
+        gameParticipants={data.game.gameParticipants}
+        turnOrder={data.game.turnOrder}
+      />
       <BoardRows boardRows={data.game.boardRows} />
     </div>
   );
