@@ -31,6 +31,15 @@ const TURN_ORDER_UPDATED_SUBSCRIPTION = gql`
   ${TURN_ORDER_FRAGMENT}
 `;
 
+const GAME_STATUS_UPDATED_SUBSCRIPTION = gql`
+  subscription GameStatusUpdated($gameCode: String!) {
+    gameStatusUpdated(gameCode: $gameCode) {
+      id
+      status
+    }
+  }
+`;
+
 interface AddSubscriptionsArgs {
   subscribeToMore: any;
   variables: {
@@ -76,6 +85,10 @@ const addSubscriptions = ({
   });
   subscribeToMore({
     document: TURN_ORDER_UPDATED_SUBSCRIPTION,
+    variables: {gameCode},
+  });
+  subscribeToMore({
+    document: GAME_STATUS_UPDATED_SUBSCRIPTION,
     variables: {gameCode},
   });
 };
